@@ -54,7 +54,7 @@ export default function Library() {
       <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
         <label className="secondary" style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius)', cursor: 'pointer' }}>
           Загрузить файл
-          <input type="file" accept=".txt,.docx,.pdf" onChange={handleFile} style={{ display: 'none' }} />
+          <input type="file" accept=".txt,.docx,.pdf,.epub" onChange={handleFile} style={{ display: 'none' }} />
         </label>
         <Link to="/reader"><button className="primary">Новый текст</button></Link>
       </div>
