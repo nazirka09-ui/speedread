@@ -17,6 +17,7 @@ export default function Reader() {
   const [loading, setLoading] = useState(!!id);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [totalWords, setTotalWords] = useState(0);
+  const [finished, setFinished] = useState(false);
   const saveTimeoutRef = useRef<number | null>(null);
 
   const saveCurrentProgress = useCallback(async (index: number) => {
@@ -67,7 +68,10 @@ export default function Reader() {
         setProgress(total > 0 ? (index / total) * 100 : 0);
         if (id) saveCurrentProgress(index);
       });
-      engine.onComplete(() => setIsPlaying(false));
+      engine.onComplete(() => {
+        setIsPlaying(false);
+        setFinished(true);
+      });
     };
 
     init();
@@ -138,6 +142,7 @@ export default function Reader() {
     setProgress(0);
     setCurrentIndex(0);
     setIsPlaying(false);
+    setFinished(false);
   };
 
   const toggleFullscreen = () => {
@@ -147,6 +152,27 @@ export default function Reader() {
       document.exitFullscreen();
     }
   };
+
+  if (finished) {
+    return (
+      <div className="container" style={{ textAlign: 'center' }}>
+        <h2>Чтение завершено</h2>
+        <p>Вы дочитали документ до конца.</p>
+        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '1.5rem' }}>
+          <button className="primary" onClick={() => {
+            setFinished(false);
+            engineRef.current?.seek(0);
+            setCurrentIndex(0);
+            setProgress(0);
+            setCurrentWord('');
+          }}>Начать заново</button>
+          <button className="secondary" onClick={() => navigate(id ? '/library' : '/')}>
+            {id ? 'В библиотеку' : 'На главную'}
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return <div className="container">Загрузка документа...</div>;

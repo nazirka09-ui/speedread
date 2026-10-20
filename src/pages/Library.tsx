@@ -8,6 +8,7 @@ import { countWords } from '../core/text-processing/tokenizer';
 export default function Library() {
   const [docs, setDocs] = useState<Document[]>([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
 
   const load = async () => {
@@ -51,6 +52,14 @@ export default function Library() {
   return (
     <div className="container">
       <h1>Библиотека</h1>
+      <div style={{ marginBottom: '1rem' }}>
+        <input
+          type="search"
+          placeholder="Поиск по названию..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+      </div>
       <div style={{ marginBottom: '1.5rem', display: 'flex', gap: '0.5rem' }}>
         <label className="secondary" style={{ padding: '0.75rem 1.25rem', borderRadius: 'var(--radius)', cursor: 'pointer' }}>
           Загрузить файл
@@ -65,7 +74,9 @@ export default function Library() {
         <p style={{ color: 'var(--text-secondary)' }}>Библиотека пуста. Загрузите файл или вставьте текст.</p>
       ) : (
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          {docs.map((doc) => (
+          {docs
+            .filter((doc) => doc.title.toLowerCase().includes(query.toLowerCase()))
+            .map((doc) => (
             <li key={doc.id} style={{ padding: '1rem', border: '1px solid var(--border)', borderRadius: 'var(--radius)', marginBottom: '0.75rem', background: 'var(--surface)' }}>
               <strong>{doc.title}</strong>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '0.25rem 0' }}>
