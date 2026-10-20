@@ -17,4 +17,15 @@ describe('tokenizer', () => {
     const words = tokenize('слово   слово\n\nслово');
     expect(words).toEqual(['слово', 'слово', 'слово']);
   });
+
+  it('handles punctuation attached', () => {
+    const words = tokenize('Привет, мир! Как дела?');
+    expect(words).toContain('Привет,');
+    expect(words).toContain('мир!');
+  });
+
+  it('handles numbers and abbreviations roughly', () => {
+    const words = tokenize('Цена 12.5 руб. т. е. пример.');
+    expect(words.length).toBeGreaterThan(2);
+  });
 });

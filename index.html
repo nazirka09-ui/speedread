@@ -2,12 +2,21 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/speedread/manifest.webmanifest" />
+    <meta name="theme-color" content="#2563eb" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SpeedRead</title>
+    <title>SpeedRead — скорочтение RSVP</title>
+    <meta name="description" content="Веб-приложение для скорочтения методом RSVP" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/speedread/sw.js').catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>
