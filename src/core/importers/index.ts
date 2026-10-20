@@ -4,11 +4,22 @@ export async function importEpub(file: File): Promise<string> {
   const zip = await JSZip.loadAsync(await file.arrayBuffer());
   const texts: string[] = [];
 
-  for (const name of Object.keys(zip.files).sort()) {
-    if (name.match(/\.(xhtml|html|htm)$/i) && !name.includes('nav') && !name.includes('toc')) {
-      const content = await zip.files[name].async('string');
-      const text = extractTextFromHtml(content);
-      if (text) texts.push(text);
+  const opfFiles = Object.keys(zip.files).filter(name => name.endsWith('.opf'));
+  if (opfFiles.length === 0) {
+    for (const name of Object.keys(zip.files)) {
+      if (name.match(/\.(xhtml|html|htm)$/i)) {
+        const content = await zip.files[name].async('string');
+        const text = extractTextFromHtml(content);
+        if (text) texts.push(text);
+      }
+    }
+  } else {
+    for (const name of Object.keys(zip.files).sort()) {
+      if (name.match(/\.(xhtml|html|htm)$/i) && !name.includes('nav') && !name.includes('toc')) {
+        const content = await zip.files[name].async('string');
+        const text = extractTextFromHtml(content);
+        if (text) texts.push(text);
+      }
     }
   }
 

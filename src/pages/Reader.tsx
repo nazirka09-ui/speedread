@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ReaderEngine } from '../core/reader-engine/ReaderEngine';
-import { getDocument, saveProgress, getProgress } from '../services/storage/db';
+import { getDocument, saveProgress, getProgress, getSettings } from '../services/storage/db';
 
 export default function Reader() {
   const { id } = useParams();
@@ -11,6 +11,7 @@ export default function Reader() {
   const [currentWord, setCurrentWord] = useState('');
   const [isPlaying, setIsPlaying] = useState(false);
   const [wpm, setWpm] = useState(300);
+  const [fontSize, setFontSize] = useState(48);
   const [progress, setProgress] = useState(0);
   const [smartPauses, setSmartPauses] = useState(true);
   const [loading, setLoading] = useState(!!id);
@@ -35,6 +36,15 @@ export default function Reader() {
     engineRef.current = engine;
 
     const init = async () => {
+      const settings = await getSettings();
+      if (settings) {
+        setWpm(settings.wpm);
+        setFontSize(settings.fontSize);
+        setSmartPauses(settings.smartPauses);
+        engine.setWpm(settings.wpm);
+        engine.setSmartPauses(settings.smartPauses);
+      }
+
       let initialText = text;
       let startIndex = 0;
       if (id) {
@@ -47,7 +57,6 @@ export default function Reader() {
       setText(initialText);
       engine.setText(initialText);
       if (startIndex > 0) engine.seek(startIndex);
-      engine.setWpm(wpm);
       setTotalWords(engine.totalWords);
       setCurrentIndex(engine.currentIndex);
 
@@ -101,6 +110,9 @@ export default function Reader() {
           e.preventDefault();
           setWpm((w) => Math.max(100, w - 25));
           break;
+        case 'Escape':
+          if (document.fullscreenElement) document.exitFullscreen();
+          break;
       }
     };
     window.addEventListener('keydown', handleKey);
@@ -142,7 +154,9 @@ export default function Reader() {
 
   return (
     <div className="container" style={{ textAlign: 'center' }}>
-      <div className="reader-word">{currentWord || 'Вставьте текст и нажмите Старт'}</div>
+      <div className="reader-word" style={{ fontSize: `${fontSize}px` }}>
+        {currentWord || 'Вставьте текст и нажмите Старт'}
+      </div>
       <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>
         {currentIndex + 1} / {totalWords} · {Math.round(progress)}%
       </div>
@@ -170,15 +184,17 @@ export default function Reader() {
           {' '}Умные паузы
         </label>
       </div>
-      <textarea
-        value={text}
-        onChange={(e) => handleTextChange(e.target.value)}
-        rows={4}
-        style={{ marginTop: '1.5rem' }}
-        placeholder="Вставьте или введите текст..."
-      />
-      <button className="secondary" style={{ marginTop: '1rem' }} onClick={() => navigate('/')}>
-        Назад
+      {!id && (
+        <textarea
+          value={text}
+          onChange={(e) => handleTextChange(e.target.value)}
+          rows={4}
+          style={{ marginTop: '1.5rem' }}
+          placeholder="Вставьте или введите текст..."
+        />
+      )}
+      <button className="secondary" style={{ marginTop: '1rem' }} onClick={() => navigate(id ? '/library' : '/')}>
+        {id ? 'В библиотеку' : 'Назад'}
       </button>
     </div>
   );
