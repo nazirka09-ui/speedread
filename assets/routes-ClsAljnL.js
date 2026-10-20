@@ -1,4 +1,4 @@
-import{o as e}from"./rolldown-runtime-C0FnF6B9.js";import{a as t,i as n,n as r,o as i,t as a}from"./word-stage-DOBAQ2cG.js";import{D as o,E as s,S as c,T as l,a as u,i as d,k as f,l as p,p as m,u as h,x as g}from"./index-CH_FGrt8.js";import{t as _}from"./import-document-AjFyNHAD.js";import{a as v,r as y,s as b}from"./format-D75SBH9M.js";import{t as x}from"./slider-DWQYNimE.js";var S=e(f(),1),C=`Быстрее взгляд остаётся на месте, а слова приходят сами, одно за другим.
+import{o as e}from"./rolldown-runtime-C0FnF6B9.js";import{a as t,i as n,n as r,o as i,t as a}from"./word-stage-CZIkRNSA.js";import{D as o,E as s,S as c,T as l,a as u,i as d,k as f,l as p,p as m,u as h,x as g}from"./index-Dq6CGHfq.js";import{t as _}from"./import-document-7DPbrY1e.js";import{a as v,r as y,s as b}from"./format-D75SBH9M.js";import{t as x}from"./slider-C4ZPuM2T.js";var S=e(f(),1),C=`Быстрее взгляд остаётся на месте, а слова приходят сами, одно за другим.
 
 Запятая оставляет короткий вдох. Точка — тишину. Новый абзац даёт моргнуть и продолжить, не теряя нить.
 

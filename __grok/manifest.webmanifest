@@ -1,0 +1,24 @@
+{
+  "name": "SpeedRead",
+  "short_name": "SpeedRead",
+  "id": "/speedread/",
+  "start_url": "/speedread/",
+  "scope": "/speedread/",
+  "display": "standalone",
+  "background_color": "#f6efe6",
+  "theme_color": "#f6efe6",
+  "icons": [
+    {
+      "src": "/speedread/__grok/icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/speedread/__grok/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
