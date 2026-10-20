@@ -1,0 +1,16 @@
+{
+  "name": "SpeedRead",
+  "short_name": "SpeedRead",
+  "description": "Веб-приложение для скорочтения методом RSVP",
+  "start_url": "/speedread/",
+  "display": "standalone",
+  "background_color": "#f8f9fa",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "/speedread/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

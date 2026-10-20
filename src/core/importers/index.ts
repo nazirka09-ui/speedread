@@ -1,3 +1,30 @@
+import JSZip from 'jszip';
+
+export async function importEpub(file: File): Promise<string> {
+  const zip = await JSZip.loadAsync(await file.arrayBuffer());
+  const texts: string[] = [];
+
+  for (const name of Object.keys(zip.files).sort()) {
+    if (name.match(/\.(xhtml|html|htm)$/i) && !name.includes('nav') && !name.includes('toc')) {
+      const content = await zip.files[name].async('string');
+      const text = extractTextFromHtml(content);
+      if (text) texts.push(text);
+    }
+  }
+
+  return texts.join('\n\n').trim();
+}
+
+function extractTextFromHtml(html: string): string {
+  const cleaned = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return cleaned;
+}
+
 export async function importTxt(file: File): Promise<string> {
   const text = await file.text();
   return text.replace(/^\uFEFF/, '');
@@ -18,7 +45,7 @@ export async function importPdf(file: File): Promise<string> {
   for (let i = 1; i <= pdf.numPages; i++) {
     const page = await pdf.getPage(i);
     const content = await page.getTextContent();
-    const pageText = content.items.map((item: any) => item.str).join(' ');
+    const pageText = content.items.map((item: any) => ('str' in item ? item.str : '')).join(' ');
     text += pageText + '\n';
   }
   return text.trim();
@@ -38,6 +65,9 @@ export async function importFile(file: File): Promise<{ text: string; format: st
   } else if (ext === 'pdf' || file.type === 'application/pdf') {
     text = await importPdf(file);
     format = 'pdf';
+  } else if (ext === 'epub' || file.type === 'application/epub+zip') {
+    text = await importEpub(file);
+    format = 'epub';
   } else {
     throw new Error(`Формат ${ext || file.type} пока не поддерживается`);
   }
