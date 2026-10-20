@@ -10,7 +10,7 @@ export interface Document {
 
 export interface ReadingProgress {
   documentId: string;
-  position: number; // word index
+  position: number;
   updatedAt: Date;
 }
 
